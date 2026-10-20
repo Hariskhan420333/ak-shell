@@ -1,5 +1,5 @@
-# AK SHELL — Prompt engine (Phase 2 baseline)
-# Phase 3 will refactor this to read colors from the active theme.
+# AK SHELL — Prompt engine
+# Colors and symbols are injected by the theme engine.
 
 # ── Load vcs_info for git integration ──────────────────
 autoload -Uz vcs_info
@@ -7,8 +7,8 @@ zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' stagedstr   '✚'
 zstyle ':vcs_info:*' unstagedstr '●'
-zstyle ':vcs_info:*' formats       '%F{cyan}(%b%u%c)%f'
-zstyle ':vcs_info:*' actionformats '%F{cyan}(%b|%a%u%c)%f'
+zstyle ':vcs_info:*' formats       '%b%u%c' # No colors here! Let prompt handle it.
+zstyle ':vcs_info:*' actionformats '%b|%a%u%c'
 
 # ── Helper: shorten path to fit small screens ──────────
 ak_shorten_path() {
@@ -28,16 +28,16 @@ ak_vcs_prompt_hook() {
 
 # ── Prompt builder ─────────────────────────────────────
 ak_build_prompt() {
-  # Capture exit code FIRST (before any other command runs).
   local last_exit=$?
 
-  local reset='%f'
-  local cyan='%F{cyan}'
-  local green='%F{green}'
-  local red='%F{red}'
-  local dim='%F{240}'
+  # ── Load theme variables (with fallbacks) ────────────
+  local c_primary="${AK_COLOR_PRIMARY:-cyan}"
+  local c_success="${AK_COLOR_SUCCESS:-green}"
+  local c_error="${AK_COLOR_ERROR:-red}"
+  local c_dim="${AK_COLOR_DIM:-240}"
+  local sym="${AK_PROMPT_SYMBOL:-❯}"
 
-  # ── Segments ─────────────────────────────────────────
+  local reset='%f'
   local user_seg=""
   local host_seg=""
   local dir_seg=""
@@ -45,39 +45,40 @@ ak_build_prompt() {
   local time_seg=""
 
   if [[ "${AK_PROMPT_SHOW_USER:-true}" == "true" ]]; then
-    user_seg="${cyan}%n${reset}"
+    user_seg="%F{$c_primary}%n${reset}"
   fi
 
   if [[ "${AK_PROMPT_SHOW_HOST:-false}" == "true" ]]; then
-    host_seg="${dim}@%m${reset}"
+    host_seg="%F{$c_dim}@%m${reset}"
   fi
 
-  dir_seg="${green}$(ak_shorten_path)${reset}"
+  dir_seg="%F{$c_success}$(ak_shorten_path)${reset}"
 
   if [[ "${AK_PROMPT_SHOW_GIT:-true}" == "true" ]] && [[ -n "${vcs_info_msg_0_:-}" ]]; then
-    git_seg=" ${vcs_info_msg_0_}"
+    git_seg=" %F{$c_primary}(${vcs_info_msg_0_})${reset}"
   fi
 
   if [[ "${AK_PROMPT_SHOW_TIME:-false}" == "true" ]]; then
-    time_seg=" ${dim}[%D{%H:%M}]${reset}"
+    time_seg=" %F{$c_dim}[%D{%H:%M}]${reset}"
   fi
 
   # ── Status character ─────────────────────────────────
-  local status_char='%(!.#.>)'
-  local status_color="${green}"
-  (( last_exit != 0 )) && status_color="${red}"
+  local status_color="%F{$c_success}"
+  if (( last_exit != 0 )); then
+    status_color="%F{$c_error}"
+  fi
 
   # ── Assemble ─────────────────────────────────────────
   case "${AK_PROMPT_MODE:-multiline}" in
     compact)
-      PROMPT="${user_seg}${host_seg} ${dir_seg}${git_seg} ${status_color}${status_char}${reset} "
+      PROMPT="${user_seg}${host_seg} ${dir_seg}${git_seg} ${status_color}${sym}${reset} "
       ;;
     singleline)
-      PROMPT="${user_seg}${host_seg} ${dir_seg}${git_seg}${time_seg} ${status_color}${status_char}${reset} "
+      PROMPT="${user_seg}${host_seg} ${dir_seg}${git_seg}${time_seg} ${status_color}${sym}${reset} "
       ;;
     multiline|*)
       PROMPT="${user_seg}${host_seg} ${dir_seg}${git_seg}${time_seg}
-${status_color}${status_char}${reset} "
+${status_color}${sym}${reset} "
       ;;
   esac
   RPROMPT=""
