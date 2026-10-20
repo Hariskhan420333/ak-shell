@@ -1,7 +1,10 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # AK SHELL — Main CLI Tool
 
-AK_HOME="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)" # Will be dynamic in Phase 6
+AK_HOME="$HOME/.ak-shell"
+if [[ ! -d "$AK_HOME/themes" ]]; then
+  AK_HOME="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+fi # Will be dynamic in Phase 6
 AK_CONFIG_DIR="$HOME/.config/ak-shell"
 
 # Colors for CLI
@@ -40,6 +43,10 @@ theme_cmd() {
   case "$subcmd" in
     list)
       echo -e "${CYAN}Available Themes:${RESET}"
+      if [[ ! -d "${AK_HOME}/themes" ]]; then
+        echo -e "${RED}Error: Themes directory not found at ${AK_HOME}/themes${RESET}"
+        return 1
+      fi
       local current=$(grep "AK_THEME=" "$AK_CONFIG_DIR/theme" 2>/dev/null | cut -d'=' -f2)
       for f in "${AK_HOME}/themes"/*.zsh; do
         local t=$(basename "$f" .zsh)
