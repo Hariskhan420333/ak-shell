@@ -18,13 +18,12 @@
 ## 📸 Screenshots
 
 <div align="center">
-  <!-- Screenshots yahan aayenge. Neeche wale links ko apne uploaded images ke naam se replace karein -->
   <img src="assets/screenshot1.png" width="45%" alt="Cyber Theme" />
   &nbsp; &nbsp;
   <img src="assets/screenshot2.png" width="45%" alt="Matrix Theme" />
 </div>
 <div align="center">
-  <i>Left: CYBER Theme with custom banner • Right: BLOOD Theme with git status</i>
+  <i>Left: CYBER Theme with custom banner • Right: MATRIX Theme with git status</i>
 </div>
 
 ---
@@ -65,13 +64,13 @@ chsh -s zsh
 touch ~/.hushlogin
 ```
 
-(This ensures AK SHELL loads automatically every time you open Termux, replacing the default welcome message).
+(This ensures AK SHELL loads automatically every time you open Termux).
 
 4. Restart Termux!
 
 ---
 
-🎮 Usage (The ak Command)
+🎮 The ak Command (Control Center)
 
 AK SHELL comes with a powerful CLI tool called ak to manage your environment.
 
@@ -84,6 +83,23 @@ ak banner text <text> Changes the big ASCII text in the banner
 ak banner reset Resets banner to default
 ak loader set <style> Sets loading animation (progress, spinner, boot, matrix, none)
 ak doctor Checks system health and dependencies
+ak help Shows all available commands
+
+---
+
+⌨️ Keyboard Shortcuts & Productivity
+
+Once inside AK SHELL, use these shortcuts to supercharge your workflow:
+
+Shortcut Action
+Right Arrow (→) Accept Auto-Suggestion (When typing a previous command, press → to complete it).
+Tab Auto-Completion (Automatically completes file names, commands, and git branches).
+Ctrl + R History Search (Search through your previously typed commands).
+Up / Down Arrow Navigate through command history.
+Ctrl + L Clear the terminal screen.
+Ctrl + C Cancel the currently running command.
+bash Temporarily switch back to the default Bash shell.
+zsh Return to AK SHELL (Zsh).
 
 ---
 
