@@ -24,7 +24,7 @@
   <img src="assets/screenshot2.png" width="45%" alt="Matrix Theme" />
 </div>
 <div align="center">
-  <i>Left: CYBER Theme with custom banner • Right: MATRIX Theme with git status</i>
+  <i>Left: CYBER Theme with custom banner • Right: BLOOD Theme with git status</i>
 </div>
 
 ---
