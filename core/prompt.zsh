@@ -17,6 +17,9 @@ ak_build_prompt() {
   local user_seg="%F{$c_primary}${user_name}${reset}"; local dir_seg="%F{$c_success}$(ak_shorten_path)${reset}"
   local git_seg=""; [[ -n "${vcs_info_msg_0_:-}" ]] && git_seg=" %F{$c_primary}(${vcs_info_msg_0_})${reset}"
   local status_color="%F{$c_success}"; (( last_exit != 0 )) && status_color="%F{$c_error}"
-  PROMPT="${user_seg} ${dir_seg}${git_seg}\n${status_color}${sym}${reset} "; RPROMPT=""
+  
+  # Yahan fix kiya gaya hai: \n ki jagah $'\n' use kiya hai
+  PROMPT="${user_seg} ${dir_seg}${git_seg}"$'\n'"${status_color}${sym}${reset} "
+  RPROMPT=""
 }
 autoload -Uz add-zsh-hook; add-zsh-hook precmd ak_vcs_prompt_hook; add-zsh-hook precmd ak_build_prompt

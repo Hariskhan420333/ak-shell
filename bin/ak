@@ -1,34 +1,57 @@
 #!/data/data/com.termux/files/usr/bin/bash
 AK_HOME="$HOME/.ak-shell"; AK_CONFIG_DIR="$HOME/.config/ak-shell"
 GREEN='\033[0;32m'; CYAN='\033[0;36m'; RED='\033[0;31m'; YELLOW='\033[1;33m'; RESET='\033[0m'
+
 show_help() { echo -e "${CYAN}AK SHELL CLI${RESET}\n  theme, config user, banner text, loader set, doctor, menu"; }
+
 theme_cmd() {
   if [[ "$1" == "list" ]]; then echo -e "${CYAN}Themes:${RESET}"; local cur=$(grep "AK_THEME=" "$AK_CONFIG_DIR/theme" 2>/dev/null | cut -d'=' -f2); for f in "${AK_HOME}/themes"/*.zsh; do local t=$(basename "$f" .zsh); [[ "$t" == "$cur" ]] && echo -e "  * ${GREEN}${t}${RESET}" || echo "    $t"; done;
   elif [[ "$1" == "set" ]]; then mkdir -p "$AK_CONFIG_DIR"; echo "AK_THEME=$2" > "$AK_CONFIG_DIR/theme"; echo -e "Theme set to: ${GREEN}$2${RESET}.";
   fi
 }
+
 banner_cmd() {
   if [[ "$1" == "reset" ]]; then rm -f "$AK_CONFIG_DIR/banner.txt"; echo "Banner reset.";
   elif [[ "$1" == "text" ]]; then command -v figlet >/dev/null || pkg install figlet -y >/dev/null 2>&1; mkdir -p "$AK_CONFIG_DIR"; { echo -e "\033[1;36m$(figlet -f standard "$2")\033[0m"; echo -e "\033[1;33m   Premium Termux Framework\033[0m"; } > "$AK_CONFIG_DIR/banner.txt"; echo "Banner updated."; fi
 }
+
 loader_cmd() {
   if [[ "$1" == "set" ]]; then mkdir -p "$AK_CONFIG_DIR"; echo "AK_LOADER_STYLE=\"$2\"" > "$AK_CONFIG_DIR/loader"; echo -e "Loader set to: ${GREEN}$2${RESET}."; fi
 }
+
+doctor_cmd() {
+  echo -e "${CYAN}Running Diagnostics...${RESET}"
+  command -v zsh >/dev/null && echo -e "[${GREEN}OK${RESET}] Zsh installed" || echo -e "[${RED}FAIL${RESET}] Zsh missing"
+  command -v git >/dev/null && echo -e "[${GREEN}OK${RESET}] Git installed" || echo -e "[${RED}FAIL${RESET}] Git missing"
+  [[ -f "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] && echo -e "[${GREEN}OK${RESET}] Auto-suggestions found" || echo -e "[${RED}FAIL${RESET}] Auto-suggestions missing"
+  [[ -f "$HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] && echo -e "[${GREEN}OK${RESET}] Highlighting found" || echo -e "[${RED}FAIL${RESET}] Highlighting missing"
+}
+
 menu_cmd() {
   while true; do
-    echo -e "\n${CYAN}=== AK SHELL Control Center ===${RESET}\n1) Themes\n2) Username\n3) Banner\n4) Loader Animation\n5) Exit"
-    read -p "Select [1-5]: " c
+    echo -e "\n${CYAN}=== AK SHELL Control Center ===${RESET}"
+    echo "1) Themes"
+    echo "2) Username"
+    echo "3) Banner"
+    echo "4) Loader Animation"
+    echo "5) Run Diagnostics (Doctor)"
+    echo "6) Exit"
+    read -p "Select [1-6]: " c
     case "$c" in
       1) theme_cmd list; read -p "Theme name: " t; theme_cmd set "$t" ;;
       2) read -p "Username: " u; mkdir -p "$AK_CONFIG_DIR"; echo "export AK_CUSTOM_USER=\"$u\"" > "$AK_CONFIG_DIR/user"; echo "Set." ;;
       3) read -p "Banner text: " b; banner_cmd text "$b" ;;
       4) read -p "Loader (progress/spinner/boot/matrix/none): " l; loader_cmd set "$l" ;;
-      5) exit 0 ;;
+      5) doctor_cmd ;;
+      6) exit 0 ;;
+      *) echo -e "${RED}Invalid option.${RESET}" ;;
     esac
   done
 }
+
 case "$1" in
   theme) shift; theme_cmd "$@" ;; banner) shift; banner_cmd "$@" ;; loader) shift; loader_cmd "$@" ;;
   config) [[ "$2" == "user" ]] && { mkdir -p "$AK_CONFIG_DIR"; echo "export AK_CUSTOM_USER=\"$3\"" > "$AK_CONFIG_DIR/user"; } ;;
+  doctor) doctor_cmd ;;
   menu|"") menu_cmd ;; *) show_help ;;
 esac
