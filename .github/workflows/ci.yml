@@ -1,0 +1,35 @@
+name: AK SHELL CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y zsh shellcheck
+        
+    - name: Run ShellCheck (Bash scripts)
+      run: |
+        shellcheck install.sh uninstall.sh bin/ak tests/*.sh || true
+        
+    - name: Zsh Syntax Check
+      run: |
+        for file in core/*.zsh config/*.zsh themes/*.zsh; do
+          echo "Checking $file..."
+          zsh -n "$file"
+        done
+        
+    - name: Run Local Tests
+      run: |
+        bash tests/test-themes.sh
+        bash tests/test-config.sh
+        bash tests/test-installer.sh
