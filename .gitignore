@@ -1,0 +1,33 @@
+# ── OS / Editor noise ──────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# ── User-specific settings (NOT committed) ─────────
+config/settings
+*.local.zsh
+*.local.sh
+
+# ── Logs & temp ────────────────────────────────────
+*.log
+/tmp/
+*.tmp
+*.bak
+
+# ── Termux storage symlink (if someone clones to ~) ─
+.storage/
+termux.properties.backup
+
+# ── Test artifacts ─────────────────────────────────
+tests/.tmp/
+tests/output/
+coverage/
+
+# ── Build / archives ───────────────────────────────
+*.tar.gz
+*.zip
+dist/

@@ -1,0 +1,32 @@
+# AK SHELL — User Settings Template
+# Copy this file to ~/.config/ak-shell/settings and edit as needed.
+# Run `ak config show` to see effective values.
+
+# ── Theme ──────────────────────────────────────────
+# Available in v1.0: cyber, ghost, blood, royal, arctic,
+#                    matrix, ocean, minimal, amoled, retro
+# AK_THEME=cyber
+
+# ── Prompt layout ──────────────────────────────────
+# AK_PROMPT_MODE=multiline
+# AK_PROMPT_SHOW_USER=true
+# AK_PROMPT_SHOW_HOST=false
+# AK_PROMPT_SHOW_GIT=true
+# AK_PROMPT_SHOW_TIME=false
+# AK_PROMPT_SHOW_DURATION=false
+# AK_PROMPT_PATH_MAX_LEN=25
+
+# ── Features ───────────────────────────────────────
+# AK_ENABLE_SUGGESTIONS=true       # Phase 4
+# AK_ENABLE_SYNTAX_HIGHLIGHT=true  # Phase 4
+# AK_ENABLE_COMPLETION=true        # Phase 4
+# AK_ENABLE_BANNER=true
+# AK_ENABLE_ANIMATIONS=false
+
+# ── History ────────────────────────────────────────
+# AK_HISTORY_SIZE=10000
+# AK_HISTORY_DUPS=historyignore
+
+# ── Startup speed ──────────────────────────────────
+# Set this to true on slow devices to skip optional features.
+# AK_FAST_STARTUP=false
