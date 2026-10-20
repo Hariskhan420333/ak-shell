@@ -70,7 +70,7 @@ touch ~/.hushlogin
 
 ---
 
-🎮 The ak Command (Control Center)
+🎮 Usage (The ak Command)
 
 AK SHELL comes with a powerful CLI tool called ak to manage your environment.
 
@@ -83,7 +83,6 @@ ak banner text <text> Changes the big ASCII text in the banner
 ak banner reset Resets banner to default
 ak loader set <style> Sets loading animation (progress, spinner, boot, matrix, none)
 ak doctor Checks system health and dependencies
-ak help Shows all available commands
 
 ---
 
